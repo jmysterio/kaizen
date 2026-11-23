@@ -10,7 +10,7 @@ import {
 import type { Answer, JournalEntry } from '../../data/types'
 
 const field =
-  'w-full resize-y rounded-card border border-line bg-washi p-3 text-base placeholder:text-muted focus:border-bamboo focus:outline-none'
+  'w-full resize-y rounded-card border border-line bg-canvas p-3 text-base placeholder:text-ink-muted focus:border-ink-muted focus:outline-none'
 
 const DRAFT_KEY = 'kaizen.journal.draft'
 /** formId: undefined = not chosen yet (use the time-of-day suggestion), null = free writing. */
@@ -37,7 +37,7 @@ const saveDraft = (d: Draft) => {
 function Questions({ answers, onChange }: { answers: Answer[]; onChange: (i: number, value: string) => void }) {
   return answers.map((a, i) => (
     <label key={i} className="block">
-      <span className="mb-1 block text-sm text-muted">{a.question}</span>
+      <span className="mb-1.5 block font-display text-base text-ink">{a.question}</span>
       <textarea
         className={field}
         rows={2}
@@ -52,7 +52,7 @@ function Questions({ answers, onChange }: { answers: Answer[]; onChange: (i: num
 function Notes({ value, guided, onChange }: { value: string; guided: boolean; onChange: (v: string) => void }) {
   return guided ? (
     <label className="block">
-      <span className="mb-1 block text-sm text-muted">Notes (optional)</span>
+      <span className="mb-1 block text-sm text-ink-muted">Notes (optional)</span>
       <textarea className={field} rows={2} autoCapitalize="sentences" value={value} onChange={(e) => onChange(e.target.value)} />
     </label>
   ) : (
@@ -98,7 +98,7 @@ function Composer() {
             role="radio"
             aria-checked={formId === c.id || (!form && c.id === null)}
             onClick={() => change({ ...draft, formId: c.id })}
-            className="min-h-10 shrink-0 rounded-full border border-line px-4 text-sm text-muted aria-checked:border-bamboo aria-checked:bg-bamboo aria-checked:text-on-bamboo"
+            className="min-h-10 shrink-0 rounded-card border border-line px-4 text-sm text-ink-muted aria-checked:border-primary aria-checked:bg-primary aria-checked:text-on-primary"
           >
             {c.name}
           </button>
@@ -155,7 +155,7 @@ function Entry({ entry }: { entry: JournalEntry }) {
           />
         </div>
         {confirming ? (
-          <div className="mt-3 rounded-card border border-sand p-3" role="alertdialog" aria-label="Confirm delete">
+          <div className="mt-3 rounded-card border border-ink-muted p-3" role="alertdialog" aria-label="Confirm delete">
             <p className="text-sm">Delete this entry?</p>
             <div className="mt-3 flex gap-2">
               <button className={primary} onClick={() => removeEntry(entry.id)}>Delete</button>
@@ -174,7 +174,7 @@ function Entry({ entry }: { entry: JournalEntry }) {
 
   return (
     <button
-      className="block min-h-14 w-full rounded-card border border-line bg-surface p-4 text-left"
+      className="block min-h-14 w-full glass rounded-card p-4 text-left"
       aria-label={`Edit entry from ${time(entry.createdAt)}`}
       onClick={() => {
         setText(entry.text)
@@ -182,7 +182,7 @@ function Entry({ entry }: { entry: JournalEntry }) {
         setEditing(true)
       }}
     >
-      <span className="block text-xs text-muted">
+      <span className="block text-xs text-ink-muted">
         {time(entry.createdAt)}
         {entry.form && ` · ${entry.form}`}
       </span>
@@ -190,7 +190,7 @@ function Entry({ entry }: { entry: JournalEntry }) {
         .filter((a) => a.answer.trim())
         .map((a, i) => (
           <span key={i} className="mt-2 block">
-            <span className="block text-sm text-muted">{a.question}</span>
+            <span className="block font-display text-sm text-ink-muted">{a.question}</span>
             <span className="block whitespace-pre-wrap text-base">{a.answer}</span>
           </span>
         ))}
@@ -221,7 +221,7 @@ export function JournalScreen() {
         <Composer />
         {!!entries?.length && (
           <label className="relative block">
-            <Search size={18} strokeWidth={1.75} aria-hidden className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+            <Search size={18} strokeWidth={1.75} aria-hidden className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted" />
             <input
               type="search"
               aria-label="Search entries"
@@ -233,12 +233,12 @@ export function JournalScreen() {
           </label>
         )}
         {days.map(([date, list]) => (
-          <section key={date} className="space-y-2">
-            <h2 className="text-sm font-medium text-muted">{heading(date)}</h2>
+          <section key={date} className="glass space-y-2 rounded-sheet p-3">
+            <h2 className="text-sm font-medium text-ink-muted">{heading(date)}</h2>
             {list.map((e) => <Entry key={e.id} entry={e} />)}
           </section>
         ))}
-        {query && entries && !shown.length && <p className="text-sm text-muted">No entries match.</p>}
+        {query && entries && !shown.length && <p className="glass rounded-card p-4 text-sm text-ink-muted">No entries match.</p>}
       </div>
     </Screen>
   )

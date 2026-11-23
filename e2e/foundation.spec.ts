@@ -3,7 +3,7 @@ import fixture from '../src/data/__fixtures__/v1.json' with { type: 'json' }
 
 test('shell navigates between tabs', async ({ page }) => {
   await page.goto('./')
-  await expect(page.getByRole('heading', { name: 'Today' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
   const tabs = page.getByRole('navigation').last()
   await tabs.getByRole('link', { name: 'Journal' }).click()
   await expect(page.getByRole('heading', { name: 'Journal' })).toBeVisible()
@@ -19,7 +19,7 @@ test('works offline after first load', async ({ page, context }) => {
   await page.reload() // now controlled by the service worker
   await context.setOffline(true)
   await page.reload()
-  await expect(page.getByRole('heading', { name: 'Today' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 })
 
 test('restore a backup, then back it up again', async ({ page }) => {
@@ -50,4 +50,20 @@ test('rejects a file that is not a Kaizen backup', async ({ page }) => {
     name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('{"hello":1}'),
   })
   await expect(page.getByRole('status')).toHaveText('Not a Kaizen backup file.')
+})
+
+test('a chosen theme sticks across reloads, with no flash back to Automatic', async ({ page }) => {
+  await page.goto('./#/settings')
+  await page.getByRole('radio', { name: 'Evening' }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'evening')
+  await page.reload()
+  // Checked before React loads the setting: the pre-paint script must already be right.
+  expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe('evening')
+  await page.getByRole('radio', { name: 'Automatic' }).click()
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', '')
+})
+
+test('Today shows the greeting header even without photos', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Good morning|Stay with what matters|Take a moment/)
 })

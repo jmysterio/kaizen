@@ -4,8 +4,10 @@ import { primary, quiet } from '../../components/styles'
 import { countRecords, exportBackup, importBackup, markBackedUp, validateBackup, type Backup } from '../../data/backup'
 import { getDiagnostics } from '../../data/diagnostics'
 import { FormsEditor } from '../journal/FormsEditor'
+import { Atmosphere } from './Atmosphere'
 import { toDateKey } from '../../data/dates'
-import { setSetting, useSetting, type Theme } from '../../data/repos/settings'
+import { THEMES, type ThemeChoice } from '../../app/theme'
+import { setSetting, useSetting } from '../../data/repos/settings'
 
 type Diagnostics = Awaited<ReturnType<typeof getDiagnostics>>
 
@@ -32,7 +34,7 @@ async function saveFile(backup: Backup): Promise<boolean> {
 }
 
 export function SettingsScreen() {
-  const theme = useSetting<Theme>('theme', 'system')
+  const theme = useSetting<ThemeChoice>('theme', 'auto')
   const [diag, setDiag] = useState<Diagnostics>()
   const [pending, setPending] = useState<Backup>()
   const [message, setMessage] = useState<string>()
@@ -77,26 +79,28 @@ export function SettingsScreen() {
       <div className="space-y-6">
         <Card>
           <h2 className="mb-3 font-medium">Appearance</h2>
-          <div role="radiogroup" aria-label="Theme" className="grid grid-cols-3 gap-1 rounded-card bg-washi p-1">
-            {(['system', 'light', 'dark'] as const).map((t) => (
+          <div role="radiogroup" aria-label="Theme" className="grid grid-cols-4 gap-1 rounded-card bg-canvas p-1">
+            {THEMES.map((t) => (
               <button
-                key={t}
+                key={t.id}
                 role="radio"
-                aria-checked={theme === t}
-                onClick={() => setSetting('theme', t)}
-                className="min-h-10 rounded-[9px] text-sm capitalize text-muted aria-checked:bg-surface aria-checked:text-ink aria-checked:shadow-soft"
+                aria-checked={(THEMES.some((x) => x.id === theme) ? theme : 'auto') === t.id}
+                onClick={() => setSetting('theme', t.id)}
+                className="min-h-10 rounded-[9px] text-sm text-ink-muted aria-checked:bg-surface aria-checked:text-ink aria-checked:shadow-soft"
               >
-                {t}
+                {t.label}
               </button>
             ))}
           </div>
         </Card>
 
+        <Atmosphere />
+
         <FormsEditor />
 
         <Card>
           <h2 className="font-medium">Backup</h2>
-          <p className="mb-4 mt-1 text-sm text-muted">
+          <p className="mb-4 mt-1 text-sm text-ink-muted">
             Your data lives only on this device. Last backup: {fmtDate(diag?.lastBackupAt)}
           </p>
           <div className="flex flex-wrap gap-2">
@@ -117,12 +121,12 @@ export function SettingsScreen() {
           </div>
 
           {pending && (
-            <div className="mt-4 rounded-card border border-sand p-4" role="alertdialog" aria-label="Confirm restore">
+            <div className="mt-4 rounded-card border border-ink-muted p-4" role="alertdialog" aria-label="Confirm restore">
               <p className="text-sm">
                 Backup from {fmtDate(pending.exportedAt)} with{' '}
                 {Object.values(countRecords(pending)).reduce((a, b) => a + b, 0)} records.
               </p>
-              <p className="mt-1 text-sm text-muted">
+              <p className="mt-1 text-sm text-ink-muted">
                 Replace erases what is on this device first. Merge keeps the newer copy of each record.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -135,7 +139,7 @@ export function SettingsScreen() {
           {message && <p role="status" className="mt-3 text-sm">{message}</p>}
         </Card>
 
-        <details className="rounded-card border border-line bg-surface p-4" onToggle={refresh}>
+        <details className="glass rounded-card p-4" onToggle={refresh}>
           <summary className="cursor-pointer font-medium">Diagnostics</summary>
           {diag && (
             <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm" data-testid="diagnostics">
@@ -148,7 +152,7 @@ export function SettingsScreen() {
             </dl>
           )}
           {diag && diag.errors.length > 0 && (
-            <ul className="mt-3 space-y-1 text-xs text-muted">
+            <ul className="mt-3 space-y-1 text-xs text-ink-muted">
               {diag.errors.map((e) => <li key={e.at}>{fmtDate(e.at)} — {e.message}</li>)}
             </ul>
           )}
@@ -160,7 +164,7 @@ export function SettingsScreen() {
 
 const Row = ({ k, children }: { k: string; children: ReactNode }) => (
   <>
-    <dt className="text-muted">{k}</dt>
+    <dt className="text-ink-muted">{k}</dt>
     <dd>{children}</dd>
   </>
 )

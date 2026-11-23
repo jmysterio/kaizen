@@ -5,8 +5,8 @@ import { quiet } from '../../components/styles'
 import { DEFAULT_FORMS, saveForms, useForms } from '../../data/repos/journal'
 import type { JournalForm } from '../../data/types'
 
-const field = 'min-h-11 w-full rounded-card border border-line bg-washi px-3 text-base focus:border-bamboo focus:outline-none'
-const icon = 'grid size-11 shrink-0 place-items-center rounded-card text-muted disabled:opacity-30'
+const field = 'min-h-11 w-full rounded-card border border-line bg-canvas px-3 text-base focus:border-ink-muted focus:outline-none'
+const icon = 'grid size-11 shrink-0 place-items-center rounded-card text-ink-muted disabled:opacity-30'
 
 const move = <T,>(list: T[], i: number, by: number) => {
   const next = [...list]
@@ -23,14 +23,14 @@ export function FormsEditor() {
   return (
     <Card>
       <h2 className="font-medium">Journal forms</h2>
-      <p className="mb-4 mt-1 text-sm text-muted">
+      <p className="mb-4 mt-1 text-sm text-ink-muted">
         Edit the questions you answer. Past entries keep the wording they were written with.
       </p>
       <div className="space-y-3">
         {forms.map((form, i) => (
           <details key={form.id} className="rounded-card border border-line p-3">
             <summary className="min-h-8 cursor-pointer">
-              {form.name || 'Untitled form'} <span className="text-sm text-muted">· {form.questions.length} questions</span>
+              {form.name || 'Untitled form'} <span className="text-sm text-ink-muted">· {form.questions.length} questions</span>
             </summary>
             <div className="mt-3 space-y-2">
               <input
@@ -40,7 +40,7 @@ export function FormsEditor() {
                 onChange={(e) => setForm(i, { ...form, name: e.target.value })}
               />
               {form.questions.map((q, qi) => (
-                <div key={qi} className="rounded-card bg-washi">
+                <div key={qi} className="rounded-card bg-canvas">
                   <textarea
                     aria-label={`Question ${qi + 1}`}
                     rows={2}

@@ -13,6 +13,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Latin font files and photos are precached so the app looks right offline.
+      workbox: { globPatterns: ['**/*.{js,css,html,svg,png,webp}', '**/*-latin-*.woff2'] },
       includeAssets: ['favicon.svg', 'apple-touch-icon-180x180.png'],
       manifest: {
         name: 'Kaizen',
@@ -21,8 +23,8 @@ export default defineConfig({
         display: 'standalone',
         start_url: '/kaizen/',
         scope: '/kaizen/',
-        background_color: '#F6F4EF',
-        theme_color: '#F6F4EF',
+        background_color: '#F1EFE9',
+        theme_color: '#F1EFE9',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
