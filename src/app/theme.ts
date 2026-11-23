@@ -17,13 +17,12 @@ export const themeForHour = (hour: number): Theme => (hour < 11 ? 'morning' : ho
 export const resolveTheme = (choice: unknown, hour = new Date().getHours()): Theme =>
   choice === 'morning' || choice === 'day' || choice === 'evening' ? choice : themeForHour(hour)
 
-const CANVAS: Record<Theme, string> = { morning: '#f5f2eb', day: '#f1efe9', evening: '#1f1b17' }
-
 /** Sets the theme on <html>, the browser bar colour, and a localStorage copy for the next cold start. */
 export function applyTheme(choice: unknown) {
   const theme = resolveTheme(choice)
   document.documentElement.dataset.theme = theme
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', CANVAS[theme])
+  const canvas = getComputedStyle(document.documentElement).getPropertyValue('--k-canvas').trim()
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', canvas)
   try {
     localStorage.setItem('kaizen.theme', String(choice))
   } catch {

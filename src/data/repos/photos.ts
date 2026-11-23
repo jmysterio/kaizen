@@ -4,9 +4,9 @@ import { setSetting, useSetting } from './settings'
 const key = (theme: Theme) => `photo.${theme}`
 export const defaultPhoto = (theme: Theme) => `${import.meta.env.BASE_URL}photos/${theme}.webp`
 
-/** The user's own photo for a theme, or the bundled default. */
-export const usePhoto = (theme: Theme) => useSetting<string | null>(key(theme), null) ?? defaultPhoto(theme)
 export const useCustomPhoto = (theme: Theme) => useSetting<string | null>(key(theme), null)
+/** The user's own photo for a theme, or the bundled default. */
+export const usePhoto = (theme: Theme) => useCustomPhoto(theme) ?? defaultPhoto(theme)
 
 /** Scale (w, h) down to fit within `max` on its longest side, never up. */
 export const fitWithin = (w: number, h: number, max: number) => {
