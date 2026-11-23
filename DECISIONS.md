@@ -22,11 +22,11 @@ Short log of significant choices and why. Newest first.
 ## Soak test results
 | Check | Date | Result |
 |---|---|---|
-| Install from Chrome → Home Screen, opens offline | | |
-| Backup → delete app → reinstall → restore | | |
+| Install from Chrome → Home Screen, opens offline | 2026-11-23 | ✅ iPhone + PC (Chrome app) |
+| Backup → export → restore | 2026-11-23 | ✅ iPhone + PC (reinstall not yet tested) |
 | Day 1: data present after force-quit + reboot | | |
 | Day 3: present after 2 days unopened | | |
 | Day 7: present after a week | | |
-| Settings → Diagnostics "Storage persisted" | | |
+| Settings → Diagnostics "Storage persisted" | 2026-11-23 | ❌ No on both (checked before installing as apps — recheck) |
 
 **Backup reminder level** (decide after day 7): weekly / after each session.

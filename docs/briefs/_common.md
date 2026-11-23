@@ -18,3 +18,11 @@ Read CLAUDE.md, ARCHITECTURE.md and DESIGN_SYSTEM.md first. They are binding.
   `npx impeccable detect http://localhost:5173/kaizen/#/<route>` is clean (start `npm run dev` first);
   run `/ponytail-review` on your diff and apply what is right.
 - Hand back: what you built, test results, any shortcut you took, and anything you need changed in shared files.
+
+## Ports (parallel agents must not share servers)
+| Agent | Dev server | E2E |
+|---|---|---|
+| Journal | `npm run dev -- --port 5181` | `E2E_PORT=4181 npm run e2e` |
+| Habits | `npm run dev -- --port 5182` | `E2E_PORT=4182 npm run e2e` |
+| Timer | `npm run dev -- --port 5183` | `E2E_PORT=4183 npm run e2e` |
+Stop any dev server you started before handing back.
