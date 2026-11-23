@@ -4,6 +4,7 @@ Personal journal, habits, time, planning and reflection app. One user, iPhone fi
 Prioritise usability, simplicity, data integrity, privacy and mobile performance over feature count.
 Challenge unnecessary requirements. Build one thing at a time.
 
+Why the app exists and the rules for every build decision: PHILOSOPHY.md (read it first).
 Full plan and reasoning: ARCHITECTURE.md, DESIGN_SYSTEM.md, DECISIONS.md. Status: README.md.
 
 ## Commands

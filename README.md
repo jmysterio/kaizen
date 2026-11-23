@@ -13,7 +13,7 @@ Everything is stored on your device. Nothing is sent anywhere.
   Soak checks on day 1, 3, 7 go in DECISIONS.md.
 - Then: Phase 3 Year Calendar → Phase 4 Goals + Weekly Review.
 
-Plan: ARCHITECTURE.md · DESIGN_SYSTEM.md · DECISIONS.md · instructions for Claude: CLAUDE.md
+Philosophy: PHILOSOPHY.md · Plan: ARCHITECTURE.md · DESIGN_SYSTEM.md · DECISIONS.md · instructions for Claude: CLAUDE.md
 
 ## Install on iPhone
 1. Open **Chrome** on the iPhone and go to the live app link above.
