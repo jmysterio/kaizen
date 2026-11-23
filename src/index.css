@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/* Design tokens — source of truth is DESIGN_SYSTEM.md. Components use the Tailwind names
+   (bg-washi, text-ink, border-line, bg-bamboo …), never raw hex. */
+@theme inline {
+  --color-washi: var(--k-washi);
+  --color-surface: var(--k-surface);
+  --color-ink: var(--k-ink);
+  --color-muted: var(--k-muted);
+  --color-line: var(--k-line);
+  --color-bamboo: var(--k-bamboo);
+  --color-on-bamboo: var(--k-on-bamboo);
+  --color-sand: var(--k-sand);
+  --color-stone: var(--k-stone);
+  --color-glass: var(--k-glass);
+
+  --font-sans: system-ui, -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --text-xs: 13px;
+  --text-sm: 15px;
+  --text-base: 17px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --radius-card: 12px;
+  --radius-sheet: 16px;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.04);
+  --ease-calm: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:root {
+  --k-washi: #f6f4ef;
+  --k-surface: #ffffff;
+  --k-ink: #1c1c1a;
+  --k-muted: #6e6b64;
+  --k-line: #e4e0d7;
+  --k-bamboo: #5e7d52;
+  --k-on-bamboo: #ffffff;
+  --k-sand: #c9b79a;
+  --k-stone: #2a2a28;
+  --k-glass: rgb(246 244 239 / 0.78);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --k-washi: #141413;
+    --k-surface: #1e1e1c;
+    --k-ink: #eceae4;
+    --k-muted: #9b978e;
+    --k-line: #2e2d2a;
+    --k-bamboo: #93b486;
+    --k-on-bamboo: #141413;
+    --k-sand: #b8a586;
+    --k-stone: #0e0e0d;
+    --k-glass: rgb(20 20 19 / 0.78);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --k-washi: #141413;
+  --k-surface: #1e1e1c;
+  --k-ink: #eceae4;
+  --k-muted: #9b978e;
+  --k-line: #2e2d2a;
+  --k-bamboo: #93b486;
+  --k-on-bamboo: #141413;
+  --k-sand: #b8a586;
+  --k-stone: #0e0e0d;
+  --k-glass: rgb(20 20 19 / 0.78);
+  color-scheme: dark;
+}
+
+html,
+body {
+  background: var(--k-washi);
+  color: var(--k-ink);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

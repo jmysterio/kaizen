@@ -1,0 +1,29 @@
+{
+  "journal": [
+    { "id": "j1", "createdAt": 1, "updatedAt": 1, "date": "2027-01-04", "text": "First entry", "prompts": { "grateful": "Coffee" } },
+    { "id": "j2", "createdAt": 2, "updatedAt": 2, "deletedAt": 3, "date": "2027-01-04", "text": "Deleted entry" }
+  ],
+  "habits": [
+    { "id": "h1", "createdAt": 1, "updatedAt": 1, "name": "Guitar", "frequency": "daily", "minimum": "5 min", "target": "20 min", "order": 0 }
+  ],
+  "habitCompletions": [
+    { "id": "c1", "createdAt": 1, "updatedAt": 1, "habitId": "h1", "date": "2027-01-04", "level": "target" }
+  ],
+  "timeEntries": [
+    { "id": "t1", "createdAt": 1, "updatedAt": 1, "activity": "Study", "startedAt": 1000, "endedAt": 5000, "pausedAt": null, "pausedMs": 0, "isOpen": 0 }
+  ],
+  "goals": [
+    { "id": "g1", "createdAt": 1, "updatedAt": 1, "title": "Play 20 songs", "year": 2027, "status": "active", "progress": 10 }
+  ],
+  "tasks": [
+    { "id": "k1", "createdAt": 1, "updatedAt": 1, "title": "Restring guitar", "kind": "weekly-priority", "week": "2027-W01", "done": false }
+  ],
+  "events": [
+    { "id": "e1", "createdAt": 1, "updatedAt": 1, "title": "Trip", "category": "trip", "startDate": "2027-03-01", "endDate": "2027-03-05" }
+  ],
+  "reviews": [
+    { "id": "r1", "createdAt": 1, "updatedAt": 1, "period": "week", "periodKey": "2027-W01", "answers": { "obstacles": "Sleep" } }
+  ],
+  "settings": [{ "key": "theme", "value": "dark" }],
+  "meta": [{ "key": "lastBackupAt", "value": 1 }]
+}
