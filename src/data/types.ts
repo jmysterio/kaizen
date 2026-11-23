@@ -12,10 +12,26 @@ export type DateKey = string
 
 export type PromptKey = 'accomplished' | 'learned' | 'better' | 'grateful' | 'improve'
 
+export interface Answer {
+  question: string
+  answer: string
+}
+
 export interface JournalEntry extends Base {
   date: DateKey
   text: string
+  /** Name of the form used. Question wording is copied into `answers`, so editing a form never rewrites history. */
+  form?: string
+  answers?: Answer[]
+  /** Entries written before forms existed (the 5 fixed prompts). Read them through `answersOf()`. */
   prompts?: Partial<Record<PromptKey, string>>
+}
+
+/** A named set of journal questions, kept in settings under `journalForms`. */
+export interface JournalForm {
+  id: string
+  name: string
+  questions: string[]
 }
 
 export interface Habit extends Base {

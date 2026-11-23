@@ -3,6 +3,7 @@ import { Card, Screen } from '../../components/Screen'
 import { primary, quiet } from '../../components/styles'
 import { countRecords, exportBackup, importBackup, markBackedUp, validateBackup, type Backup } from '../../data/backup'
 import { getDiagnostics } from '../../data/diagnostics'
+import { FormsEditor } from '../journal/FormsEditor'
 import { toDateKey } from '../../data/dates'
 import { setSetting, useSetting, type Theme } from '../../data/repos/settings'
 
@@ -90,6 +91,8 @@ export function SettingsScreen() {
             ))}
           </div>
         </Card>
+
+        <FormsEditor />
 
         <Card>
           <h2 className="font-medium">Backup</h2>

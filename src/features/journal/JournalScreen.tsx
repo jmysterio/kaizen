@@ -4,82 +4,120 @@ import { Card, Screen } from '../../components/Screen'
 import { primary, quiet } from '../../components/styles'
 import { toDateKey } from '../../data/dates'
 import {
-  PROMPTS, createEntry, isEmpty, matches, removeEntry, updateEntry, useEntries, type EntryContent,
+  answersOf, createEntry, isEmpty, matches, removeEntry, suggestedFormId, updateEntry, useEntries, useForms,
+  type EntryContent,
 } from '../../data/repos/journal'
-import type { JournalEntry } from '../../data/types'
+import type { Answer, JournalEntry } from '../../data/types'
 
 const field =
   'w-full resize-y rounded-card border border-line bg-washi p-3 text-base placeholder:text-muted focus:border-bamboo focus:outline-none'
 
 const DRAFT_KEY = 'kaizen.journal.draft'
-type Draft = EntryContent & { guided: boolean }
-const blank: Draft = { text: '', guided: false }
+/** formId: undefined = not chosen yet (use the time-of-day suggestion), null = free writing. */
+type Draft = { text: string; formId?: string | null; values: Record<string, string[]> }
+const blank: Draft = { text: '', values: {} }
 
 // The draft lives in localStorage and is written on every keystroke, so a reload or a killed app loses nothing.
 const loadDraft = (): Draft => {
   try {
-    return { ...blank, ...JSON.parse(localStorage.getItem(DRAFT_KEY) ?? '{}') }
+    const d = JSON.parse(localStorage.getItem(DRAFT_KEY) ?? '{}')
+    return { text: typeof d.text === 'string' ? d.text : '', formId: d.formId, values: d.values ?? {} }
   } catch {
     return blank
   }
 }
 const saveDraft = (d: Draft) => {
   try {
-    if (isEmpty(d) && !d.guided) localStorage.removeItem(DRAFT_KEY)
-    else localStorage.setItem(DRAFT_KEY, JSON.stringify(d))
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(d))
   } catch {
     // Storage blocked: the draft is only in memory, nothing more to do.
   }
 }
 
-function Fields({ value, guided, onChange }: { value: EntryContent; guided: boolean; onChange: (c: EntryContent) => void }) {
-  return (
-    <div className="space-y-3">
-      {guided ? (
-        PROMPTS.map(({ key, label }) => (
-          <label key={key} className="block">
-            <span className="mb-1 block text-sm text-muted">{label}</span>
-            <textarea
-              className={field}
-              rows={2}
-              autoCapitalize="sentences"
-              value={value.prompts?.[key] ?? ''}
-              onChange={(e) => onChange({ ...value, prompts: { ...value.prompts, [key]: e.target.value } })}
-            />
-          </label>
-        ))
-      ) : (
-        <textarea
-          aria-label="Entry"
-          className={`${field} min-h-40`}
-          placeholder="What's on your mind?"
-          autoCapitalize="sentences"
-          value={value.text}
-          onChange={(e) => onChange({ ...value, text: e.target.value })}
-        />
-      )}
-    </div>
+function Questions({ answers, onChange }: { answers: Answer[]; onChange: (i: number, value: string) => void }) {
+  return answers.map((a, i) => (
+    <label key={i} className="block">
+      <span className="mb-1 block text-sm text-muted">{a.question}</span>
+      <textarea
+        className={field}
+        rows={2}
+        autoCapitalize="sentences"
+        value={a.answer}
+        onChange={(e) => onChange(i, e.target.value)}
+      />
+    </label>
+  ))
+}
+
+function Notes({ value, guided, onChange }: { value: string; guided: boolean; onChange: (v: string) => void }) {
+  return guided ? (
+    <label className="block">
+      <span className="mb-1 block text-sm text-muted">Notes (optional)</span>
+      <textarea className={field} rows={2} autoCapitalize="sentences" value={value} onChange={(e) => onChange(e.target.value)} />
+    </label>
+  ) : (
+    <textarea
+      aria-label="Entry"
+      className={`${field} min-h-40`}
+      placeholder="What's on your mind?"
+      autoCapitalize="sentences"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
   )
 }
 
 function Composer() {
+  const forms = useForms().filter((f) => f.questions.length)
   const [draft, setDraft] = useState(loadDraft)
   const change = (d: Draft) => {
     setDraft(d)
     saveDraft(d)
   }
-  const save = async () => {
-    await createEntry(draft)
-    change({ ...blank, guided: draft.guided })
+  const formId = draft.formId === undefined ? suggestedFormId(forms) : draft.formId
+  const form = forms.find((f) => f.id === formId)
+  const values = (form && draft.values[form.id]) || []
+  const content: EntryContent = {
+    text: draft.text,
+    form: form?.name,
+    answers: form?.questions.map((question, i) => ({ question, answer: values[i] ?? '' })),
   }
+
+  const save = async () => {
+    await createEntry(content)
+    change({ ...blank, formId: draft.formId })
+  }
+
+  const choices = [...forms.map((f) => ({ id: f.id as string | null, name: f.name })), { id: null, name: 'Free write' }]
   return (
     <Card>
-      <Fields value={draft} guided={draft.guided} onChange={(c) => change({ ...draft, ...c })} />
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <button className="min-h-11 text-sm text-muted underline-offset-4 hover:underline" onClick={() => change({ ...draft, guided: !draft.guided })}>
-          {draft.guided ? 'Free writing' : 'Use prompts'}
-        </button>
-        <button className={primary} disabled={isEmpty(draft)} onClick={save}>Save entry</button>
+      <div role="radiogroup" aria-label="Form" className="mb-4 flex flex-wrap gap-2">
+        {choices.map((c) => (
+          <button
+            key={c.id ?? 'free'}
+            role="radio"
+            aria-checked={formId === c.id || (!form && c.id === null)}
+            onClick={() => change({ ...draft, formId: c.id })}
+            className="min-h-10 shrink-0 rounded-full border border-line px-4 text-sm text-muted aria-checked:border-bamboo aria-checked:bg-bamboo aria-checked:text-on-bamboo"
+          >
+            {c.name}
+          </button>
+        ))}
+      </div>
+      <div className="space-y-3">
+        {form && (
+          <Questions
+            answers={content.answers!}
+            onChange={(i, v) => {
+              const next = form.questions.map((_, j) => (j === i ? v : (values[j] ?? '')))
+              change({ ...draft, values: { ...draft.values, [form.id]: next } })
+            }}
+          />
+        )}
+        <Notes value={draft.text} guided={!!form} onChange={(text) => change({ ...draft, text })} />
+      </div>
+      <div className="mt-3 flex justify-end">
+        <button className={primary} disabled={isEmpty(content)} onClick={save}>Save entry</button>
       </div>
     </Card>
   )
@@ -89,23 +127,33 @@ const time = (t: number) => new Date(t).toLocaleTimeString([], { hour: 'numeric'
 
 function Entry({ entry }: { entry: JournalEntry }) {
   const [editing, setEditing] = useState(false)
-  const [value, setValue] = useState<EntryContent>(entry)
+  const [text, setText] = useState(entry.text)
+  const [answers, setAnswers] = useState(() => answersOf(entry))
   const [confirming, setConfirming] = useState(false)
 
   if (editing) {
     // Edits are saved as you type, so there is no draft to lose.
-    const change = (c: EntryContent) => {
-      setValue(c)
-      void updateEntry(entry.id, c)
-    }
+    const save = (c: Partial<EntryContent>) => void updateEntry(entry.id, c)
     return (
       <Card>
-        <Fields value={value} guided={!!entry.prompts} onChange={change} />
-        {entry.prompts && entry.text && (
-          <div className="mt-3">
-            <Fields value={value} guided={false} onChange={change} />
-          </div>
-        )}
+        <div className="space-y-3">
+          <Questions
+            answers={answers}
+            onChange={(i, v) => {
+              const next = answers.map((a, j) => (j === i ? { ...a, answer: v } : a))
+              setAnswers(next)
+              save({ answers: next })
+            }}
+          />
+          <Notes
+            value={text}
+            guided={answers.length > 0}
+            onChange={(v) => {
+              setText(v)
+              save({ text: v })
+            }}
+          />
+        </div>
         {confirming ? (
           <div className="mt-3 rounded-card border border-sand p-3" role="alertdialog" aria-label="Confirm delete">
             <p className="text-sm">Delete this entry?</p>
@@ -129,18 +177,24 @@ function Entry({ entry }: { entry: JournalEntry }) {
       className="block min-h-14 w-full rounded-card border border-line bg-surface p-4 text-left"
       aria-label={`Edit entry from ${time(entry.createdAt)}`}
       onClick={() => {
-        setValue(entry)
+        setText(entry.text)
+        setAnswers(answersOf(entry))
         setEditing(true)
       }}
     >
-      <span className="block text-xs text-muted">{time(entry.createdAt)}</span>
-      {entry.text && <span className="mt-1 block whitespace-pre-wrap text-base">{entry.text}</span>}
-      {PROMPTS.filter((p) => entry.prompts?.[p.key]).map((p) => (
-        <span key={p.key} className="mt-2 block">
-          <span className="block text-sm text-muted">{p.label}</span>
-          <span className="block whitespace-pre-wrap text-base">{entry.prompts![p.key]}</span>
-        </span>
-      ))}
+      <span className="block text-xs text-muted">
+        {time(entry.createdAt)}
+        {entry.form && ` · ${entry.form}`}
+      </span>
+      {answersOf(entry)
+        .filter((a) => a.answer.trim())
+        .map((a, i) => (
+          <span key={i} className="mt-2 block">
+            <span className="block text-sm text-muted">{a.question}</span>
+            <span className="block whitespace-pre-wrap text-base">{a.answer}</span>
+          </span>
+        ))}
+      {entry.text && <span className="mt-2 block whitespace-pre-wrap text-base">{entry.text}</span>}
     </button>
   )
 }

@@ -38,7 +38,7 @@ Shell: `src/app/Shell.tsx` (iPhone tab bar / desktop sidebar), `src/app/routes.t
 
 | Table | Key / indexes | Record |
 |---|---|---|
-| journal | id, date, updatedAt | `date`, `text`, `prompts?` {accomplished, learned, better, grateful, improve} |
+| journal | id, date, updatedAt | `date`, `text`, `form?` (form name), `answers?` [{question, answer}], legacy `prompts?` (read via `answersOf`) |
 | habits | id, order | `name`, `frequency` daily/weekly/custom, `daysOfWeek?`, `timesPerWeek?`, `minimum`, `target`, `stackAfter?`, `archived?`, `order` |
 | habitCompletions | id, habitId, date, [habitId+date] | `habitId`, `date`, `level` minimum/target, `note?` |
 | timeEntries | id, startedAt, isOpen | `activity`, `habitId?`, `startedAt`, `endedAt`, `pausedAt`, `pausedMs`, `isOpen` |
