@@ -1,5 +1,13 @@
 import { useState } from 'react'
+import { href } from '../../app/router'
 import { Card, Screen } from '../../components/Screen'
+import { primary, quiet } from '../../components/styles'
+import { toDateKey } from '../../data/dates'
+import { useTodayHabits } from '../../data/repos/habits'
+import { useEntries } from '../../data/repos/journal'
+import { useActiveTimer, useTodayTotal } from '../../data/repos/time'
+import { HabitRow } from '../habits/HabitsScreen'
+import { Running } from '../timer/TimerScreen'
 
 const QUESTIONS = [
   'What is one small thing you can do better today than yesterday?',
@@ -11,9 +19,33 @@ const QUESTIONS = [
   'What will you do today to rest and recharge?',
 ]
 
+const dur = (ms: number) => {
+  const m = Math.round(ms / 60000)
+  return m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m}m`
+}
+
+function Section({ title, link, children }: { title: string; link?: [string, string]; children: React.ReactNode }) {
+  return (
+    <section className="mt-8">
+      <div className="mb-3 flex items-baseline justify-between">
+        <h2 className="text-lg font-medium">{title}</h2>
+        {link && <a href={href(link[0])} className="text-sm text-bamboo">{link[1]}</a>}
+      </div>
+      {children}
+    </section>
+  )
+}
+
 export function TodayScreen() {
   const [now] = useState(() => new Date())
   const dayOfYear = Math.floor((+now - +new Date(now.getFullYear(), 0, 0)) / 86_400_000)
+  const habits = useTodayHabits()?.filter((r) => r.dueToday)
+  const timer = useActiveTimer()
+  const tracked = useTodayTotal()
+  const today = toDateKey(now)
+  const written = useEntries()?.filter((e) => e.date === today).length ?? 0
+  const doneCount = habits?.filter((r) => r.completion).length ?? 0
+
   return (
     <Screen title="Today">
       <p className="-mt-4 mb-8 text-muted">
@@ -23,7 +55,37 @@ export function TodayScreen() {
         <p className="mb-1 text-xs tracking-wide text-muted">Today’s question</p>
         <p className="text-lg leading-snug">{QUESTIONS[dayOfYear % QUESTIONS.length]}</p>
       </Card>
-      <p className="mt-8 text-sm text-muted">Habits, timer and priorities appear here in Phase 1.</p>
+
+      <Section
+        title="Habits"
+        link={['habits', habits?.length ? `${doneCount} of ${habits.length}` : 'Add a habit']}
+      >
+        {habits && habits.length > 0 ? (
+          <ul className="space-y-2">
+            {habits.map((r) => (
+              <li key={r.habit.id}>
+                <HabitRow r={r} edit={() => (location.hash = href('habits'))} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted">Small habits, done daily, compound. Start with one.</p>
+        )}
+      </Section>
+
+      <Section title="Time" link={['timer', tracked > 0 ? `${dur(tracked)} today` : 'Open timer']}>
+        {timer ? (
+          <Running timer={timer} />
+        ) : (
+          <a href={href('timer')} className={`${quiet} flex items-center justify-center`}>Start a timer</a>
+        )}
+      </Section>
+
+      <Section title="Journal" link={written ? ['journal', `${written} ${written === 1 ? 'entry' : 'entries'} today`] : undefined}>
+        <a href={href('journal')} className={`${primary} flex items-center justify-center`}>
+          {written ? 'Write another entry' : 'Write today’s entry'}
+        </a>
+      </Section>
     </Screen>
   )
 }

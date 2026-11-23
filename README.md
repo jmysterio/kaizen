@@ -8,8 +8,10 @@ Everything is stored on your device. Nothing is sent anywhere.
 ## Status
 - ✅ **Phase 0 — Foundation:** data layer (all v1 tables), backup/restore, app shell, design tokens,
   offline PWA, diagnostics, tests, GitHub Pages deploy.
-- ⏭ **Next — Phase 1:** Journal, Habits and Timer built in parallel (briefs in `docs/briefs/`), then Today.
-- Soak test running — record results in DECISIONS.md.
+- ✅ **Phase 1 — Daily core:** Journal, Habits, Timer (built in parallel) and the Today screen.
+- ⏭ **Now — 2-week live-in:** use it daily; log friction as journal entries tagged `#kaizen-app`.
+  Soak checks on day 1, 3, 7 go in DECISIONS.md.
+- Then: Phase 3 Year Calendar → Phase 4 Goals + Weekly Review.
 
 Plan: ARCHITECTURE.md · DESIGN_SYSTEM.md · DECISIONS.md · instructions for Claude: CLAUDE.md
 

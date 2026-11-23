@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Card, Screen } from '../../components/Screen'
+import { primary, quiet } from '../../components/styles'
 import { countRecords, exportBackup, importBackup, markBackedUp, validateBackup, type Backup } from '../../data/backup'
 import { getDiagnostics } from '../../data/diagnostics'
 import { toDateKey } from '../../data/dates'
@@ -7,9 +8,6 @@ import { setSetting, useSetting, type Theme } from '../../data/repos/settings'
 
 type Diagnostics = Awaited<ReturnType<typeof getDiagnostics>>
 
-const btn = 'min-h-11 rounded-card px-4 text-sm font-medium transition-colors duration-200 disabled:opacity-50'
-const primary = `${btn} bg-bamboo text-on-bamboo`
-const quiet = `${btn} border border-line bg-surface`
 
 const fmtDate = (t?: number) => (t ? new Date(t).toLocaleString() : 'Never')
 const fmtMB = (b?: number) => (b === undefined ? '—' : `${(b / 1_048_576).toFixed(1)} MB`)

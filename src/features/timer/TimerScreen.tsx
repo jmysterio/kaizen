@@ -1,6 +1,7 @@
 import { Pause, Pencil, Play, Plus, Square, Trash2 } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Card, Screen } from '../../components/Screen'
+import { primary, quiet } from '../../components/styles'
 import { toDateKey } from '../../data/dates'
 import {
   addManualEntry, editEntry, elapsed, pauseTimer, removeEntry, resumeTimer, startTimer, stopTimer,
@@ -8,9 +9,6 @@ import {
 } from '../../data/repos/time'
 import type { TimeEntry } from '../../data/types'
 
-const btn = 'min-h-11 rounded-card px-4 text-sm font-medium transition-colors duration-200 disabled:opacity-50'
-const primary = `${btn} bg-bamboo text-on-bamboo`
-const quiet = `${btn} border border-line bg-surface`
 const field = 'min-h-11 w-full rounded-card border border-line bg-surface px-3 text-base placeholder:text-muted'
 
 const clock = (ms: number) => {
@@ -26,7 +24,7 @@ const hhmm = (t: number) => new Date(t).toLocaleTimeString([], { hour: '2-digit'
 // datetime-local wants local `YYYY-MM-DDTHH:mm`
 const local = (t: number) => `${toDateKey(new Date(t))}T${new Date(t).toTimeString().slice(0, 5)}`
 
-function Running({ timer }: { timer: TimeEntry }) {
+export function Running({ timer }: { timer: TimeEntry }) {
   const paused = !!timer.pausedAt
   const now = useNow(!paused)
   return (

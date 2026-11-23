@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import { Search } from 'lucide-react'
 import { Card, Screen } from '../../components/Screen'
+import { primary, quiet } from '../../components/styles'
 import { toDateKey } from '../../data/dates'
 import {
   PROMPTS, createEntry, isEmpty, matches, removeEntry, updateEntry, useEntries, type EntryContent,
 } from '../../data/repos/journal'
 import type { JournalEntry } from '../../data/types'
 
-const btn = 'min-h-11 rounded-card px-4 text-sm font-medium transition-colors duration-200 disabled:opacity-50'
-const primary = `${btn} bg-bamboo text-on-bamboo`
-const quiet = `${btn} border border-line bg-surface`
 const field =
   'w-full resize-y rounded-card border border-line bg-washi p-3 text-base placeholder:text-muted focus:border-bamboo focus:outline-none'
 

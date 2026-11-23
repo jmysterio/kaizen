@@ -1,15 +1,13 @@
 import { Check, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Card, Screen } from '../../components/Screen'
+import { primary, quiet } from '../../components/styles'
 import {
   archiveHabit, clearCompletion, createHabit, setCompletion, updateHabit, useArchivedHabits, useTodayHabits,
   type TodayHabit,
 } from '../../data/repos/habits'
 import type { Habit } from '../../data/types'
 
-const btn = 'min-h-11 rounded-card px-4 text-sm font-medium transition-colors duration-200 disabled:opacity-50'
-const primary = `${btn} bg-bamboo text-on-bamboo`
-const quiet = `${btn} border border-line bg-surface`
 const field = 'min-h-11 w-full rounded-card border border-line bg-surface px-3 text-base'
 const DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -45,7 +43,7 @@ export function HabitsScreen() {
       <ul className="space-y-3">
         {rows?.map((r) => (
           <li key={r.habit.id}>
-            <Row r={r} edit={() => setEditing(r.habit)} />
+            <HabitRow r={r} edit={() => setEditing(r.habit)} />
           </li>
         ))}
       </ul>
@@ -66,7 +64,7 @@ export function HabitsScreen() {
   )
 }
 
-function Row({ r, edit }: { r: TodayHabit; edit: () => void }) {
+export function HabitRow({ r, edit }: { r: TodayHabit; edit: () => void }) {
   const { habit, completion, streak, consistency, dueToday } = r
   const level = completion?.level
   const unit = habit.frequency === 'weekly' ? 'week' : 'day'
