@@ -139,7 +139,7 @@ export function SettingsScreen() {
           {message && <p role="status" className="mt-3 text-sm">{message}</p>}
         </Card>
 
-        <details className="rounded-card border border-line bg-surface p-4" onToggle={refresh}>
+        <details className="glass rounded-card p-4" onToggle={refresh}>
           <summary className="cursor-pointer font-medium">Diagnostics</summary>
           {diag && (
             <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm" data-testid="diagnostics">

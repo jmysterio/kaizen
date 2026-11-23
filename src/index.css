@@ -39,7 +39,7 @@
 :root,
 :root[data-theme="day"] {
   --k-canvas: #f1efe9;
-  --k-surface: #f8f7f3;
+  --k-surface: rgb(248 247 243 / 0.6); /* glass over the photo */
   --k-surface-raised: #fcfbf8;
   --k-surface-muted: #e6e3dc;
   --k-ink: #292a28;
@@ -57,7 +57,7 @@
 /* Morning — "First light" (§5.1): warmer ivory, brighter, same charcoal type. */
 :root[data-theme="morning"] {
   --k-canvas: #f5f2eb;
-  --k-surface: #fbf9f4;
+  --k-surface: rgb(251 249 244 / 0.6);
   --k-surface-raised: #fffefb;
   --k-surface-muted: #ebe6dc;
   --k-ink: #292a28;
@@ -75,7 +75,7 @@
 /* Evening — "Warm retreat" (§5.3): walnut and charcoal-brown, paper text, amber like lamplight. */
 :root[data-theme="evening"] {
   --k-canvas: #1f1b17;
-  --k-surface: #29241f;
+  --k-surface: rgb(41 36 31 / 0.6);
   --k-surface-raised: #322c26;
   --k-surface-muted: #3b342d;
   --k-ink: #eae6dc; /* paper */
@@ -90,9 +90,12 @@
   color-scheme: dark;
 }
 
+/* Background on <html> only: a body background would paint over the fixed photo layer (z-index -10). */
+html {
+  background: var(--k-canvas);
+}
 html,
 body {
-  background: var(--k-canvas);
   color: var(--k-ink);
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
@@ -105,6 +108,14 @@ body {
 
 p {
   text-wrap: pretty;
+}
+
+/* Frosted glass over the background photo. Everything with text on the photo sits on one of these. */
+@utility glass {
+  background-color: var(--k-surface);
+  border: 1px solid var(--k-line);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
 }
 
 :focus-visible {

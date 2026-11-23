@@ -41,12 +41,12 @@ function PhotoRow({ theme, label }: { theme: Theme; label: string }) {
   )
 }
 
-/** Per-theme photos for the Today header. Stored on this device and included in backups. */
+/** Per-theme background photos. Stored on this device and included in backups. */
 export function Atmosphere() {
   return (
     <Card>
       <h2 className="font-medium">Atmosphere</h2>
-      <p className="mt-1 text-sm text-ink-muted">Photos for the Today header. Yours stay on this device and are included in backups.</p>
+      <p className="mt-1 text-sm text-ink-muted">The background photo for each time of day. Yours stay on this device and are included in backups.</p>
       <ul className="mt-2 divide-y divide-line">
         {THEMES.filter((t) => t.id !== 'auto').map((t) => (
           <PhotoRow key={t.id} theme={t.id as Theme} label={t.label} />

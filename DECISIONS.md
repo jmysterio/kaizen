@@ -9,6 +9,8 @@ Short log of significant choices and why. Newest first.
 - **Charcoal is the identity, green is rare**: v0 bamboo-green primary replaced.
 - **Photography**: free-license defaults, owner can set their own per theme (stored on-device, in backups).
 - **All changes via pull request**, reviewed on the iPhone before merge.
+- **Immersive background**: the time-of-day photo fills every page behind ~60% frosted-glass panels (owner's call,
+  overriding spec §6.3/§9.4). Text is always on glass; typing areas stay solid for legibility.
 
 ## 2026-11-23 — Foundation (Phase 0)
 - **PWA only, no native shell.** Capacitor/iOS needs a Mac + Xcode and a $99/yr Apple developer account; the user

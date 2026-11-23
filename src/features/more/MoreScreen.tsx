@@ -6,7 +6,7 @@ import { Screen } from '../../components/Screen'
 export function MoreScreen() {
   return (
     <Screen title="More">
-      <ul className="overflow-hidden rounded-card border border-line bg-surface">
+      <ul className="overflow-hidden glass rounded-card">
         {ROUTES.filter((r) => r.more).map((r) => (
           <li key={r.id} className="border-b border-line last:border-0">
             <a href={href(r.id)} className="flex min-h-14 items-center gap-3 px-4">

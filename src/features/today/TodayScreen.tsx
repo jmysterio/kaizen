@@ -27,7 +27,7 @@ const dur = (ms: number) => {
 
 function Section({ title, link, children }: { title: string; link?: [string, string]; children: React.ReactNode }) {
   return (
-    <section className="mt-10">
+    <section className="glass mt-6 rounded-sheet p-4">
       <div className="mb-3 flex items-baseline justify-between">
         <h2 className="font-display text-xl">{title}</h2>
         {link && <a href={href(link[0])} className="min-h-11 content-center text-sm text-ink-muted underline-offset-4 hover:underline">{link[1]}</a>}
@@ -49,11 +49,12 @@ export function TodayScreen() {
 
   return (
     <Screen>
-      <Hero />
-      <section aria-label="Today’s question" className="border-l-2 border-line pl-4">
-        <p className="text-xs tracking-wide text-ink-muted">Today’s question</p>
-        <p className="mt-1 font-display text-xl leading-snug">{QUESTIONS[dayOfYear % QUESTIONS.length]}</p>
-      </section>
+      <Hero>
+        <section aria-label="Today’s question" className="mt-5 border-t border-line pt-4">
+          <p className="text-xs tracking-wide text-ink-muted">Today’s question</p>
+          <p className="mt-1 font-display text-xl leading-snug">{QUESTIONS[dayOfYear % QUESTIONS.length]}</p>
+        </section>
+      </Hero>
 
       <Section
         title="Habits"

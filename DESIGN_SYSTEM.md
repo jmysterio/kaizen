@@ -664,11 +664,18 @@ Scale: `text-xs` 13 · `sm` 15 · `base` 17 · `lg` 20 · `xl` 24 · `2xl` 32 ·
 ### Components
 - `Screen` (`src/components/Screen.tsx`) — page frame with serif title; no title = flush top (Today).
 - `Card` — `rounded-card border-line bg-surface p-4`.
-- `Hero` (`src/components/Hero.tsx`) — Today header: theme photo + scrim + greeting; mist fallback if no photo.
+- `Hero` (`src/components/Hero.tsx`) — Today's greeting and daily question in a glass panel.
+- `glass` utility (`src/index.css`) — frosted panel (surface ≈60% + 24px blur + hairline). **Any text that sits over the
+  background photo must be on a `glass` panel**; inputs you type into stay solid (`bg-canvas` / `bg-surface-raised`).
 - `primary` / `quiet` button classes (`src/components/styles.ts`).
-- Photos: defaults in `public/photos/{morning,day,evening}.webp` (credits in `design-references/PHOTO_CREDITS.md`);
+- Photos: the app background (`Shell`), defaults in `public/photos/{morning,day,evening}.webp` (credits in `design-references/PHOTO_CREDITS.md`);
   the owner's own photos via Settings → Atmosphere, resized on-device and stored in settings (`photo.<theme>`),
   included in backups.
+
+### Owner decision: immersive background (overrides §6.3 and §9.4)
+At the owner's request the time-of-day photo fills the whole app background (not the desktop sidebar), behind a
+`canvas/45` tint, and content sits on glass panels. Guardrails kept from the spec: text never sits directly on the
+photo, writing areas are solid, the app works without the photo (canvas colour), and the photo is local/precached.
 
 ### Checks
 - `npx impeccable detect http://localhost:5173/kaizen/#/<route>` on every changed screen, in each theme.

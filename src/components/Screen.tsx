@@ -5,7 +5,7 @@ export function Screen({ title, action, children }: { title?: string; action?: R
   return (
     <main className={`mx-auto w-full max-w-2xl px-5 pb-32 md:px-10 md:pb-12 ${title ? 'pt-6 md:pt-12' : 'md:pt-10'}`}>
       {title && (
-      <header className="mb-6 flex items-end justify-between gap-4">
+      <header className="glass mb-6 flex items-end justify-between gap-4 rounded-sheet px-5 py-4">
         <h1 className="font-display text-3xl font-normal tracking-tight">{title}</h1>
         {action}
       </header>
@@ -17,7 +17,7 @@ export function Screen({ title, action, children }: { title?: string; action?: R
 
 /** Quiet surface for grouping content. */
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-card border border-line bg-surface p-4 ${className}`}>{children}</section>
+  return <section className={`glass rounded-card p-4 ${className}`}>{children}</section>
 }
 
 export function Placeholder({ phase }: { phase: string }) {

@@ -3,7 +3,8 @@ import { useEffect } from 'react'
 import { getSetting } from '../data/repos/settings'
 import { ROUTES } from './routes'
 import { href, useRoute } from './router'
-import { applyTheme } from './theme'
+import { applyTheme, useTheme } from './theme'
+import { usePhoto } from '../data/repos/photos'
 
 export function Shell() {
   const routeId = useRoute()
@@ -25,11 +26,18 @@ export function Shell() {
     scrollTo(0, 0) // returns a Promise in newer browsers; must not become the effect cleanup
   }, [route.id])
 
+  const photo = usePhoto(useTheme())
+
   const Screen = route.screen
   return (
     <div className="min-h-dvh md:flex">
+      {/* Time-of-day photo behind every page (not the sidebar); the canvas tint keeps loose text readable. */}
+      <div aria-hidden className="fixed inset-0 -z-10 md:left-56">
+        <img key={photo} src={photo} alt="" className="size-full object-cover" onError={(e) => (e.currentTarget.style.visibility = 'hidden')} />
+        <div className="absolute inset-0 bg-canvas/45" />
+      </div>
       {/* Desktop sidebar */}
-      <nav aria-label="Main" className="sticky top-0 hidden h-dvh w-56 shrink-0 border-r border-line px-3 py-8 md:block">
+      <nav aria-label="Main" className="sticky top-0 hidden h-dvh w-56 shrink-0 border-r border-line bg-canvas px-3 py-8 md:block">
         <p className="mb-8 px-3 text-sm font-semibold tracking-[0.2em] text-ink-muted">KAIZEN</p>
         <ul className="space-y-1">
           {ROUTES.filter((r) => r.id !== 'more').map((r) => (

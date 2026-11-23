@@ -174,7 +174,7 @@ function Entry({ entry }: { entry: JournalEntry }) {
 
   return (
     <button
-      className="block min-h-14 w-full rounded-card border border-line bg-surface p-4 text-left"
+      className="block min-h-14 w-full glass rounded-card p-4 text-left"
       aria-label={`Edit entry from ${time(entry.createdAt)}`}
       onClick={() => {
         setText(entry.text)
@@ -233,12 +233,12 @@ export function JournalScreen() {
           </label>
         )}
         {days.map(([date, list]) => (
-          <section key={date} className="space-y-2">
+          <section key={date} className="glass space-y-2 rounded-sheet p-3">
             <h2 className="text-sm font-medium text-ink-muted">{heading(date)}</h2>
             {list.map((e) => <Entry key={e.id} entry={e} />)}
           </section>
         ))}
-        {query && entries && !shown.length && <p className="text-sm text-ink-muted">No entries match.</p>}
+        {query && entries && !shown.length && <p className="glass rounded-card p-4 text-sm text-ink-muted">No entries match.</p>}
       </div>
     </Screen>
   )

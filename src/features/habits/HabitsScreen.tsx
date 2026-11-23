@@ -8,7 +8,7 @@ import {
 } from '../../data/repos/habits'
 import type { Habit } from '../../data/types'
 
-const field = 'min-h-11 w-full rounded-card border border-line bg-surface px-3 text-base'
+const field = 'min-h-11 w-full rounded-card border border-line bg-surface-raised px-3 text-base'
 const DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -39,7 +39,7 @@ export function HabitsScreen() {
         </button>
       }
     >
-      {rows?.length === 0 && <p className="text-ink-muted">No habits yet. Start with one small thing.</p>}
+      {rows?.length === 0 && <p className="glass rounded-card p-4 text-ink-muted">No habits yet. Start with one small thing.</p>}
       <ul className="space-y-3">
         {rows?.map((r) => (
           <li key={r.habit.id}>
@@ -48,7 +48,7 @@ export function HabitsScreen() {
         ))}
       </ul>
       {archived.length > 0 && (
-        <details className="mt-8">
+        <details className="glass mt-8 rounded-sheet px-4 pb-2">
           <summary className="min-h-11 cursor-pointer py-2 text-sm text-ink-muted">Archived ({archived.length})</summary>
           <ul className="space-y-1">
             {archived.map((h) => (

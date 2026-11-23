@@ -9,7 +9,7 @@ import {
 } from '../../data/repos/time'
 import type { TimeEntry } from '../../data/types'
 
-const field = 'min-h-11 w-full rounded-card border border-line bg-surface px-3 text-base placeholder:text-ink-muted'
+const field = 'min-h-11 w-full rounded-card border border-line bg-surface-raised px-3 text-base placeholder:text-ink-muted'
 
 const clock = (ms: number) => {
   const s = Math.floor(ms / 1000)
@@ -116,14 +116,15 @@ export function TimerScreen() {
         ))}
       </div>
 
-      <div className="mb-3 flex items-baseline justify-between">
+      <section className="glass mb-6 rounded-sheet px-4 pt-3">
+      <div className="mb-1 flex items-baseline justify-between">
         <h2 className="text-lg font-semibold">Today <span className="text-ink-muted" data-testid="today-total">{dur(today)}</span></h2>
         <button className="flex min-h-11 items-center gap-1 text-sm text-ink-muted" onClick={() => setForm('new')}>
           <Plus size={18} strokeWidth={1.75} aria-hidden /> Add entry
         </button>
       </div>
       {form === 'new' && <EntryForm onDone={() => setForm(undefined)} />}
-      <ul className="mb-8 divide-y divide-line">
+      <ul className="divide-y divide-line">
         {entries?.map((e) =>
           form === e.id ? (
             <li key={e.id} className="py-3"><EntryForm entry={e} onDone={() => setForm(undefined)} /></li>
@@ -147,16 +148,17 @@ export function TimerScreen() {
         )}
         {entries?.length === 0 && <li className="py-3 text-ink-muted">Nothing tracked yet today.</li>}
       </ul>
+      </section>
 
       {week.length > 0 && (
-        <>
-          <h2 className="mb-3 text-lg font-semibold">This week</h2>
+        <section className="glass rounded-sheet px-4 pt-3">
+          <h2 className="mb-1 text-lg font-semibold">This week</h2>
           <ul className="divide-y divide-line">
             {week.map(([a, ms]) => (
               <li key={a} className="flex min-h-11 items-center justify-between"><span>{a}</span><span className="tabular-nums text-ink-muted">{dur(ms)}</span></li>
             ))}
           </ul>
-        </>
+        </section>
       )}
     </Screen>
   )
