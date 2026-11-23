@@ -46,14 +46,17 @@ full goal cascade, Google Calendar, charts, push reminders, local speech-to-text
   passages); exports a markdown "review packet".
 
 ## Design
-Follow DESIGN_SYSTEM.md. Use token classes (`bg-washi`, `bg-surface`, `text-ink`, `text-muted`, `border-line`,
-`bg-bamboo text-on-bamboo`, `rounded-card`) — never raw hex in components. Use `Screen` / `Card` from
-`src/components/Screen.tsx`. Lucide icons at strokeWidth 1.75. Touch targets ≥ 44px. Glass only on the tab bar
-and sheets. Legibility over decoration; no SaaS-dashboard look, gradients, clutter or gamification.
+Target look: DESIGN_SYSTEM.md (owner's v1.1 spec — source of truth) + `design-references/` (moodboard).
+Follow the spec's §17 image-reference workflow; the written spec wins over images. Use role token classes
+(`bg-canvas`, `bg-surface`, `text-ink`, `text-ink-muted`, `border-line`, `bg-primary text-on-primary`, `bg-accent`,
+`font-display`) — never raw hex. Green (`accent`) is rare. Everything must work in Morning, Daytime and Evening.
+Use `Screen` / `Card` / `Hero` and `primary` / `quiet`. Lucide icons strokeWidth 1.75. Touch targets ≥ 44px.
 Critique UI with the impeccable, hallmark and ui-ux-pro-max skills. Reference repos in ../ are READ-ONLY.
 
 ## Workflow
-`main` always deployable (push = deploy). `feature/<name>` branches; a PR is a rollback checkpoint.
+**Every change goes through a pull request — never commit to `main` directly** (push to main = deploy).
+`feature/<name>` branch → `gh pr create` → `/ponytail-review` → owner checks on iPhone via `npm run dev -- --host`
+(LAN link) → merge only after the owner's OK.
 Before merge: `npm test` + `npm run e2e` pass → `/ponytail-review` (evaluate, don't blindly apply) →
 impeccable detect + DESIGN_REVIEW checklist on the iPhone for UI → no unresolved data-integrity or security issue.
 Phase end: `/ponytail-audit`. Keep README status, DECISIONS.md and ARCHITECTURE.md current.

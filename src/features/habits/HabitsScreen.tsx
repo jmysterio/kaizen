@@ -39,7 +39,7 @@ export function HabitsScreen() {
         </button>
       }
     >
-      {rows?.length === 0 && <p className="text-muted">No habits yet. Start with one small thing.</p>}
+      {rows?.length === 0 && <p className="text-ink-muted">No habits yet. Start with one small thing.</p>}
       <ul className="space-y-3">
         {rows?.map((r) => (
           <li key={r.habit.id}>
@@ -49,11 +49,11 @@ export function HabitsScreen() {
       </ul>
       {archived.length > 0 && (
         <details className="mt-8">
-          <summary className="min-h-11 cursor-pointer py-2 text-sm text-muted">Archived ({archived.length})</summary>
+          <summary className="min-h-11 cursor-pointer py-2 text-sm text-ink-muted">Archived ({archived.length})</summary>
           <ul className="space-y-1">
             {archived.map((h) => (
               <li key={h.id} className="flex items-center justify-between gap-3">
-                <span className="text-muted">{h.name}</span>
+                <span className="text-ink-muted">{h.name}</span>
                 <button className={quiet} onClick={() => archiveHabit(h.id, false)}>Restore</button>
               </li>
             ))}
@@ -79,25 +79,25 @@ export function HabitRow({ r, edit }: { r: TodayHabit; edit: () => void }) {
         aria-label={level ? `Undo ${habit.name}` : `Mark ${habit.name} done`}
         aria-pressed={!!level}
         onClick={() => (level ? clearCompletion(habit.id) : setCompletion(habit.id, 'minimum'))}
-        className="grid size-11 shrink-0 place-items-center rounded-full border border-line text-on-bamboo transition-colors duration-200 aria-pressed:border-bamboo aria-pressed:bg-bamboo"
+        className="grid size-11 shrink-0 place-items-center rounded-full border border-line text-on-accent transition-colors duration-200 aria-pressed:border-accent aria-pressed:bg-accent"
       >
         {level && <Check size={22} strokeWidth={1.75} aria-hidden />}
       </button>
       <button onClick={edit} className="min-h-11 min-w-0 flex-1 text-left" aria-label={`Edit ${habit.name}`}>
-        <span className={`block truncate ${dueToday ? '' : 'text-muted'}`}>{habit.name}</span>
-        <span className="block truncate text-xs text-muted">
+        <span className={`block truncate ${dueToday ? '' : 'text-ink-muted'}`}>{habit.name}</span>
+        <span className="block truncate text-xs text-ink-muted">
           {habit.stackAfter ? `After I ${habit.stackAfter} · ` : ''}
           {schedule(habit)} · {habit.minimum}
           {habit.target && ` / ${habit.target}`}
         </span>
-        {stats.length > 0 && <span className="block text-xs text-muted">{stats.join(' · ')}</span>}
+        {stats.length > 0 && <span className="block text-xs text-ink-muted">{stats.join(' · ')}</span>}
       </button>
       {level === 'minimum' && habit.target && (
         <button className={quiet} onClick={() => setCompletion(habit.id, 'target')}>
           Did {habit.target}
         </button>
       )}
-      {level === 'target' && <span className="text-xs text-bamboo">Target</span>}
+      {level === 'target' && <span className="text-xs text-accent">Target</span>}
     </Card>
   )
 }
@@ -136,12 +136,12 @@ function HabitForm({ habit, done }: { habit?: Habit; done: () => void }) {
       }}
     >
       <label className="block">
-        <span className="mb-1 block text-sm text-muted">Name</span>
+        <span className="mb-1 block text-sm text-ink-muted">Name</span>
         <input className={field} value={name} onChange={(e) => setName(e.target.value)} autoFocus={!habit} />
       </label>
 
       <div>
-        <span className="mb-1 block text-sm text-muted">How often</span>
+        <span className="mb-1 block text-sm text-ink-muted">How often</span>
         <div role="radiogroup" aria-label="How often" className="grid grid-cols-3 gap-1 rounded-card bg-surface p-1">
           {(['daily', 'weekly', 'custom'] as const).map((f) => (
             <button
@@ -150,7 +150,7 @@ function HabitForm({ habit, done }: { habit?: Habit; done: () => void }) {
               role="radio"
               aria-checked={frequency === f}
               onClick={() => setFrequency(f)}
-              className="min-h-11 rounded-[9px] text-sm capitalize text-muted aria-checked:bg-washi aria-checked:text-ink aria-checked:shadow-soft"
+              className="min-h-11 rounded-[9px] text-sm capitalize text-ink-muted aria-checked:bg-canvas aria-checked:text-ink aria-checked:shadow-soft"
             >
               {f}
             </button>
@@ -160,7 +160,7 @@ function HabitForm({ habit, done }: { habit?: Habit; done: () => void }) {
 
       {frequency === 'weekly' && (
         <label className="block">
-          <span className="mb-1 block text-sm text-muted">Times per week</span>
+          <span className="mb-1 block text-sm text-ink-muted">Times per week</span>
           <select className={field} value={times} onChange={(e) => setTimes(Number(e.target.value))}>
             {[1, 2, 3, 4, 5, 6, 7].map((n) => <option key={n}>{n}</option>)}
           </select>
@@ -175,7 +175,7 @@ function HabitForm({ habit, done }: { habit?: Habit; done: () => void }) {
               aria-label={DAY_NAMES[i]}
               aria-pressed={days.includes(i)}
               onClick={() => setDays(days.includes(i) ? days.filter((x) => x !== i) : [...days, i])}
-              className="size-11 rounded-full border border-line bg-surface text-sm aria-pressed:border-bamboo aria-pressed:bg-bamboo aria-pressed:text-on-bamboo"
+              className="size-11 rounded-full border border-line bg-surface text-sm aria-pressed:border-accent aria-pressed:bg-accent aria-pressed:text-on-accent"
             >
               {d}
             </button>
@@ -185,17 +185,17 @@ function HabitForm({ habit, done }: { habit?: Habit; done: () => void }) {
 
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
-          <span className="mb-1 block text-sm text-muted">Minimum</span>
+          <span className="mb-1 block text-sm text-ink-muted">Minimum</span>
           <input className={field} placeholder="5 min" value={minimum} onChange={(e) => setMinimum(e.target.value)} />
         </label>
         <label className="block">
-          <span className="mb-1 block text-sm text-muted">Target</span>
+          <span className="mb-1 block text-sm text-ink-muted">Target</span>
           <input className={field} placeholder="20 min" value={target} onChange={(e) => setTarget(e.target.value)} />
         </label>
       </div>
 
       <label className="block">
-        <span className="mb-1 block text-sm text-muted">After I… (optional)</span>
+        <span className="mb-1 block text-sm text-ink-muted">After I… (optional)</span>
         <input className={field} placeholder="pour my morning coffee" value={stackAfter} onChange={(e) => setStackAfter(e.target.value)} />
       </label>
 

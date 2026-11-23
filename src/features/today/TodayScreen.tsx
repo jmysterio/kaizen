@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { href } from '../../app/router'
-import { Card, Screen } from '../../components/Screen'
+import { Hero } from '../../components/Hero'
+import { Screen } from '../../components/Screen'
 import { primary, quiet } from '../../components/styles'
 import { toDateKey } from '../../data/dates'
 import { useTodayHabits } from '../../data/repos/habits'
@@ -26,10 +27,10 @@ const dur = (ms: number) => {
 
 function Section({ title, link, children }: { title: string; link?: [string, string]; children: React.ReactNode }) {
   return (
-    <section className="mt-8">
+    <section className="mt-10">
       <div className="mb-3 flex items-baseline justify-between">
-        <h2 className="text-lg font-medium">{title}</h2>
-        {link && <a href={href(link[0])} className="text-sm text-bamboo">{link[1]}</a>}
+        <h2 className="font-display text-xl">{title}</h2>
+        {link && <a href={href(link[0])} className="min-h-11 content-center text-sm text-ink-muted underline-offset-4 hover:underline">{link[1]}</a>}
       </div>
       {children}
     </section>
@@ -47,14 +48,12 @@ export function TodayScreen() {
   const doneCount = habits?.filter((r) => r.completion).length ?? 0
 
   return (
-    <Screen title="Today">
-      <p className="-mt-4 mb-8 text-muted">
-        {now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}
-      </p>
-      <Card>
-        <p className="mb-1 text-xs tracking-wide text-muted">Today’s question</p>
-        <p className="text-lg leading-snug">{QUESTIONS[dayOfYear % QUESTIONS.length]}</p>
-      </Card>
+    <Screen>
+      <Hero />
+      <section aria-label="Today’s question" className="border-l-2 border-line pl-4">
+        <p className="text-xs tracking-wide text-ink-muted">Today’s question</p>
+        <p className="mt-1 font-display text-xl leading-snug">{QUESTIONS[dayOfYear % QUESTIONS.length]}</p>
+      </section>
 
       <Section
         title="Habits"
@@ -69,7 +68,7 @@ export function TodayScreen() {
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-muted">Small habits, done daily, compound. Start with one.</p>
+          <p className="text-sm text-ink-muted">Small habits, done daily, compound. Start with one.</p>
         )}
       </Section>
 

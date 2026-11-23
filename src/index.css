@@ -1,78 +1,98 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/newsreader";
 
-/* Design tokens — source of truth is DESIGN_SYSTEM.md. Components use the Tailwind names
-   (bg-washi, text-ink, border-line, bg-bamboo …), never raw hex. */
+/* Semantic tokens (DESIGN_SYSTEM.md §4, §15). Components use role names only
+   (bg-canvas, text-ink, border-line, bg-primary …), never raw hex or material names.
+   Materials — charcoal, stone, walnut, amber, moss — live only in the theme blocks below. */
 @theme inline {
-  --color-washi: var(--k-washi);
+  --color-canvas: var(--k-canvas);
   --color-surface: var(--k-surface);
+  --color-surface-raised: var(--k-surface-raised);
+  --color-surface-muted: var(--k-surface-muted);
   --color-ink: var(--k-ink);
-  --color-muted: var(--k-muted);
+  --color-ink-muted: var(--k-ink-muted);
   --color-line: var(--k-line);
-  --color-bamboo: var(--k-bamboo);
-  --color-on-bamboo: var(--k-on-bamboo);
-  --color-sand: var(--k-sand);
-  --color-stone: var(--k-stone);
+  --color-primary: var(--k-primary);
+  --color-on-primary: var(--k-on-primary);
+  --color-accent: var(--k-accent);
+  --color-on-accent: var(--k-on-accent);
   --color-glass: var(--k-glass);
+  --color-mist: var(--k-mist);
 
-  --font-sans: system-ui, -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Newsreader Variable", Georgia, "Times New Roman", serif;
   --text-xs: 13px;
   --text-sm: 15px;
   --text-base: 17px;
   --text-lg: 20px;
   --text-xl: 24px;
   --text-2xl: 32px;
+  --text-3xl: 40px;
   --radius-card: 12px;
   --radius-sheet: 16px;
-  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.04);
+  --shadow-soft: 0 1px 2px rgb(30 25 20 / 0.04), 0 6px 20px rgb(30 25 20 / 0.05);
   --ease-calm: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-:root {
-  --k-washi: #f6f4ef;
-  --k-surface: #ffffff;
-  --k-ink: #1c1c1a;
-  --k-muted: #6e6b64;
-  --k-line: #e4e0d7;
-  --k-bamboo: #5e7d52;
-  --k-on-bamboo: #ffffff;
-  --k-sand: #c9b79a;
-  --k-stone: #2a2a28;
-  --k-glass: rgb(246 244 239 / 0.78);
+/* Daytime — "In balance" (§5.2). Spec §4.1 values; ink-muted darkened from #777873 to pass AA on canvas. */
+:root,
+:root[data-theme="day"] {
+  --k-canvas: #f1efe9;
+  --k-surface: #f8f7f3;
+  --k-surface-raised: #fcfbf8;
+  --k-surface-muted: #e6e3dc;
+  --k-ink: #292a28;
+  --k-ink-muted: #636460;
+  --k-line: #d2d0c9;
+  --k-primary: #303230; /* charcoal */
+  --k-on-primary: #f8f7f3;
+  --k-accent: #5f6a52; /* moss, darkened for AA */
+  --k-on-accent: #fcfbf8;
+  --k-glass: rgb(241 239 233 / 0.82);
+  --k-mist: #e4e2dc;
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --k-washi: #141413;
-    --k-surface: #1e1e1c;
-    --k-ink: #eceae4;
-    --k-muted: #9b978e;
-    --k-line: #2e2d2a;
-    --k-bamboo: #93b486;
-    --k-on-bamboo: #141413;
-    --k-sand: #b8a586;
-    --k-stone: #0e0e0d;
-    --k-glass: rgb(20 20 19 / 0.78);
-    color-scheme: dark;
-  }
+/* Morning — "First light" (§5.1): warmer ivory, brighter, same charcoal type. */
+:root[data-theme="morning"] {
+  --k-canvas: #f5f2eb;
+  --k-surface: #fbf9f4;
+  --k-surface-raised: #fffefb;
+  --k-surface-muted: #ebe6dc;
+  --k-ink: #292a28;
+  --k-ink-muted: #65625c;
+  --k-line: #dbd5ca;
+  --k-primary: #303230;
+  --k-on-primary: #fbf9f4;
+  --k-accent: #5f6a52;
+  --k-on-accent: #fffefb;
+  --k-glass: rgb(245 242 235 / 0.82);
+  --k-mist: #e9e4da;
+  color-scheme: light;
 }
-:root[data-theme="dark"] {
-  --k-washi: #141413;
-  --k-surface: #1e1e1c;
-  --k-ink: #eceae4;
-  --k-muted: #9b978e;
-  --k-line: #2e2d2a;
-  --k-bamboo: #93b486;
-  --k-on-bamboo: #141413;
-  --k-sand: #b8a586;
-  --k-stone: #0e0e0d;
-  --k-glass: rgb(20 20 19 / 0.78);
+
+/* Evening — "Warm retreat" (§5.3): walnut and charcoal-brown, paper text, amber like lamplight. */
+:root[data-theme="evening"] {
+  --k-canvas: #1f1b17;
+  --k-surface: #29241f;
+  --k-surface-raised: #322c26;
+  --k-surface-muted: #3b342d;
+  --k-ink: #eae6dc; /* paper */
+  --k-ink-muted: #ada394;
+  --k-line: #433a31;
+  --k-primary: #b58b58; /* amber-muted */
+  --k-on-primary: #1f1b17;
+  --k-accent: #95a184; /* moss, lifted for dark */
+  --k-on-accent: #1f1b17;
+  --k-glass: rgb(31 27 23 / 0.84);
+  --k-mist: #3a322b;
   color-scheme: dark;
 }
 
 html,
 body {
-  background: var(--k-washi);
+  background: var(--k-canvas);
   color: var(--k-ink);
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
@@ -83,8 +103,12 @@ body {
   line-height: 1.5;
 }
 
+p {
+  text-wrap: pretty;
+}
+
 :focus-visible {
-  outline: 2px solid var(--k-bamboo);
+  outline: 2px solid var(--k-ink);
   outline-offset: 2px;
 }
 

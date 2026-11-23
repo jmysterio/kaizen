@@ -9,7 +9,7 @@ import {
 } from '../../data/repos/time'
 import type { TimeEntry } from '../../data/types'
 
-const field = 'min-h-11 w-full rounded-card border border-line bg-surface px-3 text-base placeholder:text-muted'
+const field = 'min-h-11 w-full rounded-card border border-line bg-surface px-3 text-base placeholder:text-ink-muted'
 
 const clock = (ms: number) => {
   const s = Math.floor(ms / 1000)
@@ -29,7 +29,7 @@ export function Running({ timer }: { timer: TimeEntry }) {
   const now = useNow(!paused)
   return (
     <Card className="mb-6 text-center">
-      <p className="text-muted">{timer.activity}{paused && ' · paused'}</p>
+      <p className="text-ink-muted">{timer.activity}{paused && ' · paused'}</p>
       <p className="my-2 text-2xl font-semibold tabular-nums" role="timer" aria-label="Elapsed" data-testid="elapsed">
         {clock(elapsed(timer, now))}
       </p>
@@ -65,10 +65,10 @@ function EntryForm({ entry, onDone }: { entry?: TimeEntry; onDone: () => void })
   return (
     <form onSubmit={submit} className="mb-4 grid gap-3">
       <input name="activity" aria-label="Activity" placeholder="Activity" defaultValue={entry?.activity} className={field} />
-      <label className="grid gap-1 text-sm text-muted">Start
+      <label className="grid gap-1 text-sm text-ink-muted">Start
         <input name="start" type="datetime-local" defaultValue={entry ? local(entry.startedAt) : ''} className={field} />
       </label>
-      <label className="grid gap-1 text-sm text-muted">End
+      <label className="grid gap-1 text-sm text-ink-muted">End
         <input name="end" type="datetime-local" defaultValue={entry?.endedAt ? local(entry.endedAt) : ''} className={field} />
       </label>
       {error && <p role="alert" className="text-sm">{error}</p>}
@@ -117,8 +117,8 @@ export function TimerScreen() {
       </div>
 
       <div className="mb-3 flex items-baseline justify-between">
-        <h2 className="text-lg font-semibold">Today <span className="text-muted" data-testid="today-total">{dur(today)}</span></h2>
-        <button className="flex min-h-11 items-center gap-1 text-sm text-muted" onClick={() => setForm('new')}>
+        <h2 className="text-lg font-semibold">Today <span className="text-ink-muted" data-testid="today-total">{dur(today)}</span></h2>
+        <button className="flex min-h-11 items-center gap-1 text-sm text-ink-muted" onClick={() => setForm('new')}>
           <Plus size={18} strokeWidth={1.75} aria-hidden /> Add entry
         </button>
       </div>
@@ -131,21 +131,21 @@ export function TimerScreen() {
             <li key={e.id} className="flex min-h-14 items-center gap-2">
               <div className="min-w-0 flex-1">
                 <p className="truncate">{e.activity}</p>
-                <p className="text-xs text-muted">{hhmm(e.startedAt)}{e.endedAt ? ` – ${hhmm(e.endedAt)}` : ' – now'}</p>
+                <p className="text-xs text-ink-muted">{hhmm(e.startedAt)}{e.endedAt ? ` – ${hhmm(e.endedAt)}` : ' – now'}</p>
               </div>
               <span className="tabular-nums">{dur(elapsed(e, now))}</span>
               {!e.isOpen && (
-                <button aria-label={`Edit ${e.activity}`} className="grid size-11 place-items-center text-muted" onClick={() => setForm(e.id)}>
+                <button aria-label={`Edit ${e.activity}`} className="grid size-11 place-items-center text-ink-muted" onClick={() => setForm(e.id)}>
                   <Pencil size={18} strokeWidth={1.75} aria-hidden />
                 </button>
               )}
-              <button aria-label={`Delete ${e.activity}`} className="grid size-11 place-items-center text-muted" onClick={() => void removeEntry(e.id)}>
+              <button aria-label={`Delete ${e.activity}`} className="grid size-11 place-items-center text-ink-muted" onClick={() => void removeEntry(e.id)}>
                 <Trash2 size={18} strokeWidth={1.75} aria-hidden />
               </button>
             </li>
           ),
         )}
-        {entries?.length === 0 && <li className="py-3 text-muted">Nothing tracked yet today.</li>}
+        {entries?.length === 0 && <li className="py-3 text-ink-muted">Nothing tracked yet today.</li>}
       </ul>
 
       {week.length > 0 && (
@@ -153,7 +153,7 @@ export function TimerScreen() {
           <h2 className="mb-3 text-lg font-semibold">This week</h2>
           <ul className="divide-y divide-line">
             {week.map(([a, ms]) => (
-              <li key={a} className="flex min-h-11 items-center justify-between"><span>{a}</span><span className="tabular-nums text-muted">{dur(ms)}</span></li>
+              <li key={a} className="flex min-h-11 items-center justify-between"><span>{a}</span><span className="tabular-nums text-ink-muted">{dur(ms)}</span></li>
             ))}
           </ul>
         </>

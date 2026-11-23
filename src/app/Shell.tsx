@@ -1,18 +1,25 @@
+import { useLiveQuery } from 'dexie-react-hooks'
 import { useEffect } from 'react'
-import { useSetting, type Theme } from '../data/repos/settings'
+import { getSetting } from '../data/repos/settings'
 import { ROUTES } from './routes'
 import { href, useRoute } from './router'
+import { applyTheme } from './theme'
 
 export function Shell() {
   const routeId = useRoute()
   const route = ROUTES.find((r) => r.id === routeId) ?? ROUTES[0]
   const active = route.more ? 'more' : route.id
-  const theme = useSetting<Theme>('theme', 'system')
+  // undefined while loading: index.html already applied the cached choice, so don't flash a default.
+  const themeChoice = useLiveQuery(() => getSetting('theme', 'auto'))
 
   useEffect(() => {
-    if (theme === 'system') delete document.documentElement.dataset.theme
-    else document.documentElement.dataset.theme = theme
-  }, [theme])
+    if (themeChoice === undefined) return
+    applyTheme(themeChoice)
+    // Automatic re-checks the time only when you come back to the app, never mid-task.
+    const onReturn = () => document.visibilityState === 'visible' && applyTheme(themeChoice)
+    document.addEventListener('visibilitychange', onReturn)
+    return () => document.removeEventListener('visibilitychange', onReturn)
+  }, [themeChoice])
 
   useEffect(() => {
     scrollTo(0, 0) // returns a Promise in newer browsers; must not become the effect cleanup
@@ -23,14 +30,14 @@ export function Shell() {
     <div className="min-h-dvh md:flex">
       {/* Desktop sidebar */}
       <nav aria-label="Main" className="sticky top-0 hidden h-dvh w-56 shrink-0 border-r border-line px-3 py-8 md:block">
-        <p className="mb-8 px-3 text-sm font-semibold tracking-[0.2em] text-muted">KAIZEN</p>
+        <p className="mb-8 px-3 text-sm font-semibold tracking-[0.2em] text-ink-muted">KAIZEN</p>
         <ul className="space-y-1">
           {ROUTES.filter((r) => r.id !== 'more').map((r) => (
             <li key={r.id}>
               <a
                 href={href(r.id)}
                 aria-current={r.id === route.id ? 'page' : undefined}
-                className="flex items-center gap-3 rounded-card px-3 py-2 text-sm text-muted transition-colors duration-200 hover:text-ink aria-[current=page]:bg-surface aria-[current=page]:text-ink"
+                className="flex items-center gap-3 rounded-card px-3 py-2 text-sm text-ink-muted transition-colors duration-200 hover:text-ink aria-[current=page]:bg-surface aria-[current=page]:text-ink"
               >
                 <r.icon size={18} strokeWidth={1.75} aria-hidden />
                 {r.label}
@@ -55,7 +62,7 @@ export function Shell() {
               <a
                 href={href(r.id)}
                 aria-current={r.id === active ? 'page' : undefined}
-                className="flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px] text-muted transition-colors duration-200 aria-[current=page]:text-bamboo"
+                className="flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px] text-ink-muted transition-colors duration-200 aria-[current=page]:text-ink"
               >
                 <r.icon size={22} strokeWidth={1.75} aria-hidden />
                 {r.label}
